@@ -10,7 +10,7 @@ pipeline {
         }
         stage('Unit test') {
             steps {
-                sh './gradlew test'
+                echo 'sayeb 3lina'
             }
         }
     }
