@@ -1,0 +1,2 @@
+[webservers]
+web2 ansible_host=10.0.0.11 ansible_user=vagrant ansible_ssh_common_args='-o StrictHostKeyChecking=no'

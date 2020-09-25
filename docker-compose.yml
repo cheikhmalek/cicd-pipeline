@@ -1,0 +1,8 @@
+version: "2"
+services:
+  calculator:
+    image: 10.0.0.2:5000/calculator:${TAG}
+    ports:
+      - 8080
+  redis:
+    image: redis:latest

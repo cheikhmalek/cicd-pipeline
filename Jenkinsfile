@@ -35,5 +35,32 @@ pipeline {
                 sh "./gradlew build"
             }
         }
+
+        stage("Docker build") {
+      steps {
+        sh "docker build -t 10.0.0.2:5000/calculator:${BUILD_TIMESTAMP} ."
+      }
+    }
+    // stage("Docker login") {
+    //   steps {
+    //     withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'leszko',
+    //                       usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+    //       sh "docker login --username $USERNAME --password $PASSWORD"
+    //     }
+    //   }
+    // }
+
+    stage("Docker push") {
+      steps {
+        sh "docker push 10.0.0.2:5000/calculator:${BUILD_TIMESTAMP}"
+      }
+    }
+    stage("Deploy to staging") {
+      steps {
+        withCredentials([sshUserPrivateKey(credentialsId: '	5cdc15b2-110d-41cd-bba3-3c881126193a', keyFileVariable: 'KEY')]) {
+            sh "ansible-playbook -i inventory/staging playbook.yml --private-key ${KEY} -u vagrant -e tag=${BUILD_TIMESTAMP}"
+        }
+      }
+    }
     }
 }
